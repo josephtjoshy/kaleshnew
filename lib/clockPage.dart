@@ -9,7 +9,7 @@ import 'package:flutter_range_slider/flutter_range_slider.dart' as range;
 //import 'dart:io';
 import 'data.dart';
 double _lowerValue = 1;
-
+int durationMin=1,durationSec=0;
 
 class ClockDisplay extends StatefulWidget {
   @override
@@ -120,7 +120,7 @@ class _ShowClockState extends State<ShowClock> {
                               children: <Widget>[
                                 GestureDetector(
                                   child: Container(
-                                    width: 40,
+                                    width: 60,
                                     height: 60,
                                     decoration: BoxDecoration(
                                       color:Colors.pinkAccent,
@@ -130,13 +130,19 @@ class _ShowClockState extends State<ShowClock> {
                                   ),
                                   onTap: ()
                                   {
-                                    print("pressed");
+                                    setState(() {
+                                      if(durationMin<60)
+                                        {
+                                          durationMin=durationMin+1;
+                                        }
+
+                                    });
                                   },
                                 ),
-                                Text("Min",style: TextStyle(fontSize: 20.0,color: Colors.pink),),
+                                Text("$durationMin Min",style: TextStyle(fontSize: 18.0,color: Colors.pink),),
                                 GestureDetector(
                                   child: Container(
-                                    width: 40,
+                                    width: 60,
                                     height: 60,
                                     decoration: BoxDecoration(
                                       color:Colors.pinkAccent,
@@ -146,7 +152,12 @@ class _ShowClockState extends State<ShowClock> {
                                   ),
                                   onTap: ()
                                   {
-                                    print("pressed");
+                                    setState(() {
+                                      if(durationMin>0 )
+                                      {
+                                        durationMin=durationMin-1;
+                                      }
+                                    });
                                   },
                                 ),
                               ],
@@ -158,7 +169,7 @@ class _ShowClockState extends State<ShowClock> {
                               children: <Widget>[
                                 GestureDetector(
                                   child: Container(
-                                    width: 40,
+                                    width: 60,
                                     height: 60,
                                     decoration: BoxDecoration(
                                       color:Colors.pinkAccent,
@@ -168,17 +179,23 @@ class _ShowClockState extends State<ShowClock> {
                                   ),
                                   onTap: ()
                                   {
-                                    print("pressed");
+                                    setState(() {
+                                      if(durationSec<60)
+                                        {
+                                          durationSec=durationSec+1;
+                                        }
+
+                                    });
                                   },
                                 ),
                                 Column(
                                   children: <Widget>[
-                                    Text("Sec",style: TextStyle(fontSize: 20.0,color: Colors.pink),),
+                                    Text("$durationSec Sec",style: TextStyle(fontSize: 18.0,color: Colors.pink),),
                                   ],
                                 ),
                                 GestureDetector(
                                   child: Container(
-                                    width: 40,
+                                    width: 60,
                                     height: 60,
                                     decoration: BoxDecoration(
                                       color:Colors.pinkAccent,
@@ -188,7 +205,12 @@ class _ShowClockState extends State<ShowClock> {
                                   ),
                                   onTap: ()
                                   {
-                                    print("pressed");
+                                    setState(() {
+                                      if(durationSec>0)
+                                      {
+                                        durationSec=durationSec-1;
+                                      }
+                                    });
                                   },
                                 ),
                               ],
@@ -295,7 +317,8 @@ class _ShowClockState extends State<ShowClock> {
                         id:DateTime.now().toString(),
                         hour:hours,
                         min: minutes,
-                        duration: _lowerValue.ceil(),
+                        durationmin: durationMin,
+                        durationsec: durationSec,
                         day1: selectedData[0],
                         day2: selectedData[1],
                         day3: selectedData[2],
@@ -310,7 +333,8 @@ class _ShowClockState extends State<ShowClock> {
                         id: DateTime.now().toString(),
                         hour:hours,
                         min: minutes,
-                        duration: _lowerValue.ceil(),
+                        durationmin:durationMin,
+                        durationsec: durationSec,
                         day1: selectedData[0],
                         day2: selectedData[1],
                         day3: selectedData[2],

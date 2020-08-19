@@ -46,7 +46,7 @@ class _ClockListViewState extends State<ClockListView> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text("${timeData[index].hour}:${timeData[index].min} Min",style: TextStyle(fontSize: 20,color: Colors.blue),),
-                  Text("Duration : ${timeData[index].duration}",style: TextStyle(fontSize: 17,color: Colors.blue),),
+                  Text("Duration : ${timeData[index].durationmin}:${timeData[index].durationsec}",style: TextStyle(fontSize: 17,color: Colors.blue),),
                 ],
               ),
               subtitle: Text("${getWeeks(index)}"),
@@ -107,7 +107,7 @@ class _ClockListViewState extends State<ClockListView> {
               FloatingActionButton.extended(
                 onPressed: ()
                 {
-
+                  socketClient.write('helo');
                 },
                 heroTag: "setHero",
                 label: Text("Set"),

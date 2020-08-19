@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 //import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
@@ -65,7 +68,8 @@ class _LoadingPageState extends State<LoadingPage> {
           id: map["id"],
           hour: map["hour"],
           min: map["min"],
-          duration: map["duration"],
+          durationmin: map["durationmin"],
+          durationsec: map["durationsec"],
           day1: map["day1"],
           day2: map["day2"],
           day3: map["day3"],
@@ -78,6 +82,22 @@ class _LoadingPageState extends State<LoadingPage> {
     }).whenComplete(() {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => WorkingPage()));
+    });
+    ServerSocket.bind("0.0.0.0", 4010)
+    ..then((socket) {
+      serverSocket=socket;
+      runZoned(() {}, onError: (e) {
+        print('Server error 1: $e');
+      });
+      serverSocket.listen((sock) {}).onData((clientSocket) {
+          socketClient=clientSocket;
+      });
+    })
+    ..catchError((onError) {
+    print(['Server error 2: ', onError.toString()]);
+    })
+    ..whenComplete(() {
+    print(['Complete']);
     });
     super.initState();
   }
