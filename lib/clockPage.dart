@@ -113,30 +113,51 @@ class _ShowClockState extends State<ShowClock> {
                       padding: const EdgeInsets.fromLTRB(50.0,8.0,0.0,0.0),
                       child: Row(
                         children: <Widget>[
-                          Text("Duration",style: TextStyle(fontSize: 20.0,color: Colors.pink),),
-                          Container(
-                            width:MediaQuery.of(context).size.width/1.7 ,
-                            child: range.RangeSlider(
-                              min: 1,
-                              max: 60,
-                              lowerValue: _lowerValue,
-                              upperValue: 60,
-                              divisions: 60,
-                              showValueIndicator: true,
-                              valueIndicatorMaxDecimals: 0,
-                              onChanged: (double newLowerValue, double newUpperValue)
-                              {
-                                setState(() {
-                                  _lowerValue=newLowerValue;
-                                 // _upperValue=newUpperValue;
-
-                                });
-
-
-                              },
-
-
-
+                          Text("Duration:",style: TextStyle(fontSize: 20.0,color: Colors.pink),),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(50.0,0.0,0.0,0.0),
+                            child: Column(
+                              children: <Widget>[
+                                GestureDetector(
+                                  child: Container(
+                                    width: 40,
+                                    height: 60,
+                                    decoration: BoxDecoration(
+                                      color:Colors.pinkAccent,
+                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(20.0),topRight: Radius.circular(20.0)),
+                                    ),
+                                    child:Center(child:Text("+") ,),
+                                  ),
+                                  onTap: ()
+                                  {
+                                    print("pressed");
+                                  },
+                                ),
+                                Text("Min",style: TextStyle(fontSize: 20.0,color: Colors.pink),),
+                                GestureDetector(
+                                  child: Container(
+                                    width: 40,
+                                    height: 60,
+                                    decoration: BoxDecoration(
+                                      color:Colors.pinkAccent,
+                                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20.0),bottomRight: Radius.circular(20.0)),
+                                    ),
+                                    child:Center(child:Text("-") ,),
+                                  ),
+                                  onTap: ()
+                                  {
+                                    print("pressed");
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(50.0,0.0,0.0,0.0),
+                            child: Column(
+                              children: <Widget>[
+                                Text("Sec",style: TextStyle(fontSize: 20.0,color: Colors.pink),),
+                              ],
                             ),
                           ),
                         ],
