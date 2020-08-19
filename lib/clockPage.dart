@@ -105,7 +105,7 @@ class _ShowClockState extends State<ShowClock> {
                     ),
                   ),
                   Container(
-                    height: MediaQuery.of(context).size.height/1.5,
+                    height: MediaQuery.of(context).size.height/1.6,
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width/1,
@@ -153,10 +153,44 @@ class _ShowClockState extends State<ShowClock> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(50.0,0.0,0.0,0.0),
+                            padding: const EdgeInsets.fromLTRB(30.0,0.0,0.0,0.0),
                             child: Column(
                               children: <Widget>[
-                                Text("Sec",style: TextStyle(fontSize: 20.0,color: Colors.pink),),
+                                GestureDetector(
+                                  child: Container(
+                                    width: 40,
+                                    height: 60,
+                                    decoration: BoxDecoration(
+                                      color:Colors.pinkAccent,
+                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(20.0),topRight: Radius.circular(20.0)),
+                                    ),
+                                    child:Center(child:Text("+") ,),
+                                  ),
+                                  onTap: ()
+                                  {
+                                    print("pressed");
+                                  },
+                                ),
+                                Column(
+                                  children: <Widget>[
+                                    Text("Sec",style: TextStyle(fontSize: 20.0,color: Colors.pink),),
+                                  ],
+                                ),
+                                GestureDetector(
+                                  child: Container(
+                                    width: 40,
+                                    height: 60,
+                                    decoration: BoxDecoration(
+                                      color:Colors.pinkAccent,
+                                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20.0),bottomRight: Radius.circular(20.0)),
+                                    ),
+                                    child:Center(child:Text("-") ,),
+                                  ),
+                                  onTap: ()
+                                  {
+                                    print("pressed");
+                                  },
+                                ),
                               ],
                             ),
                           ),
