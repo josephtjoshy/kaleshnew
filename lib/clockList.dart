@@ -69,7 +69,7 @@ class _ClockListViewState extends State<ClockListView> {
           )
         ],
         leading: GestureDetector(
-          child: Icon(Icons.arrow_back),
+          child: Icon(Icons.arrow_back,size: 40,),
           onTap: ()
           {
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>WorkingPage()));

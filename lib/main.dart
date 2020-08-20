@@ -1,7 +1,7 @@
 
 import 'dart:io';
 import 'dart:async';
-
+import 'package:wifi_iot/wifi_iot.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 //import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
@@ -14,7 +14,7 @@ import 'data.dart';
 bool toogleValue1 = true;
 bool toogleValue2 = true;
 int displayTimeon = 1,displayTimeof=1;
-Timer timer;
+Timer timer,wifiTimer;
 void main() {
   runApp(Loading());
 }
@@ -63,7 +63,10 @@ class _LoadingPageState extends State<LoadingPage> {
   @override
   void initState() {
     // TODO: implement initState
-
+   wifi();
+    wifiTimer=Timer.periodic(Duration(seconds: 3), (timerwi) {
+      wifi();
+    });
     databaseHelper = DatabaseHelper();
     databaseHelper.getTimeDataMapList().then((value) {
       for (var map in value) {
@@ -443,6 +446,25 @@ class _WorkingPageState extends State<WorkingPage> {
                 onPressed: () {
                   if(online==true)
                     {
+                      List tranRepData=[];
+                      tranRepData.add("Repeat");
+                      if(toogleValue1==true)
+                        {
+                          tranRepData.add((displayTimeon*60).toString());
+                        }
+                      if(toogleValue1==false)
+                        {
+                          tranRepData.add(displayTimeon.toString());
+                        }
+                      if(toogleValue2==true)
+                      {
+                        tranRepData.add((displayTimeof*60).toString());
+                      }
+                      if(toogleValue2==false)
+                      {
+                        tranRepData.add(displayTimeof.toString());
+                      }
+                      socketClient.write(tranRepData);
 
                       Fluttertoast.showToast(
                           msg: "Data Transmitted Succesfully",
@@ -474,4 +496,33 @@ class _WorkingPageState extends State<WorkingPage> {
       ),
     );
   }
+}
+Future<void> wifi() async {
+  WiFiForIoTPlugin.isEnabled().then(
+        (val) {
+      if (val != null) {
+        isEnabled = val;
+        print('Wifi Status:$isEnabled');
+        if (isEnabled == false) {
+          WiFiForIoTPlugin.setEnabled(true);
+          print('Wifi turned on');
+        }
+      }
+    },
+  );
+  WiFiForIoTPlugin.isConnected().then(
+        (val) {
+      if (val != null) {
+        isConnected = val;
+        print('Connected:$isConnected');
+      }
+      if(isConnected==false)
+        {
+          online=false;
+        }
+
+    },
+  );
+
+
 }
