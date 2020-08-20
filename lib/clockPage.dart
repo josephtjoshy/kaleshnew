@@ -4,11 +4,10 @@ import 'package:flutter_app/clockList.dart';
 import 'package:flutter_app/data.dart';
 //import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
-import 'package:flutter_range_slider/flutter_range_slider.dart' as range;
+//import 'package:flutter_range_slider/flutter_range_slider.dart' as range;
 
 //import 'dart:io';
 import 'data.dart';
-double _lowerValue = 1;
 int durationMin=1,durationSec=0;
 
 class ClockDisplay extends StatefulWidget {

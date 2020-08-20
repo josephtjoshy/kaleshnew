@@ -1,3 +1,4 @@
+
 import 'dart:io';
 import 'dart:async';
 
@@ -12,7 +13,8 @@ import 'data.dart';
 
 bool toogleValue1 = true;
 bool toogleValue2 = true;
-int displayTime = 1;
+int displayTimeon = 1,displayTimeof=1;
+Timer timer;
 void main() {
   runApp(Loading());
 }
@@ -61,6 +63,7 @@ class _LoadingPageState extends State<LoadingPage> {
   @override
   void initState() {
     // TODO: implement initState
+
     databaseHelper = DatabaseHelper();
     databaseHelper.getTimeDataMapList().then((value) {
       for (var map in value) {
@@ -83,25 +86,37 @@ class _LoadingPageState extends State<LoadingPage> {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => WorkingPage()));
     });
+
     ServerSocket.bind("0.0.0.0", 4010)
-    ..then((socket) {
-      serverSocket=socket;
-      runZoned(() {}, onError: (e) {
-        print('Server error 1: $e');
-      });
-      serverSocket.listen((sock) {}).onData((clientSocket) {
+      ..then((socket) {
+        serverSocket=socket;
+        runZoned(() {}, onError: (e) {
+          online=false;
+          print('Server error 1: $e');
+        });
+        serverSocket.listen((sock) {}).onData((clientSocket) {
           socketClient=clientSocket;
+          print(socketClient.remoteAddress);
+          online=true;
+
+        });
+      })
+      ..catchError((onError) {
+        print(['Server error 2: ', onError.toString()]);
+        online=false;
+      })
+      ..whenComplete(() {
+        print(['Complete']);
       });
-    })
-    ..catchError((onError) {
-    print(['Server error 2: ', onError.toString()]);
-    })
-    ..whenComplete(() {
-    print(['Complete']);
-    });
     super.initState();
   }
 
+ @override
+ void dispose() {
+    // TODO: implement dispose
+
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -133,7 +148,35 @@ class WorkingPage extends StatefulWidget {
   _WorkingPageState createState() => _WorkingPageState();
 }
 
+
 class _WorkingPageState extends State<WorkingPage> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    timer=Timer.periodic(Duration(seconds: 1), (timer1) {
+     // print(online);
+      setState(() {
+        if(online==true)
+        {
+          online=true;
+        }
+
+
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    print("timer canceled");
+    // TODO: implement dispose
+    timer.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -141,53 +184,20 @@ class _WorkingPageState extends State<WorkingPage> {
         title: Text("Automatic Motor"),
         actions: <Widget>[
           Center(
-              child: Text(
-            "Not Connected",
+              child:Text(
+            online==false?"Not Connected":"Connected",
             style: TextStyle(fontSize: 20.0),
           )),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Icon(
-              Icons.remove_circle_outline,
-              color: Colors.red,
+              online==false?Icons.remove_circle_outline:Icons.wifi,
+              color: online==false?Colors.red:Colors.green,
             ),
           )
         ],
       ),
-      endDrawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            Card(
-              color: Colors.blue,
-              child: Container(
-                height: MediaQuery.of(context).size.height / 4,
-              ),
-            ),
-            Container(
-              //color: Colors.blue,
-              child: Card(
-                color: Colors.blue,
-                child: ListTile(
-                  title: Text(
-                    "Hour Wise",
-                    style: TextStyle(fontSize: 20.0, color: Colors.white),
-                  ),
-                  leading: Icon(
-                    Icons.hourglass_full,
-                    color: Colors.white,
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ClockListData()));
-                  },
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
+
       body: Column(children: <Widget>[
         Expanded(
             child: Padding(
@@ -261,7 +271,7 @@ class _WorkingPageState extends State<WorkingPage> {
                           initialValue: 1,
                           onChange: (double value1) {
                             setState(() {
-                              displayTime = value1.ceil();
+                              displayTimeon = value1.ceil();
                             });
                           },
                           innerWidget: (double value) {
@@ -276,7 +286,7 @@ class _WorkingPageState extends State<WorkingPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               Text(
-                                displayTime.toString(),
+                                displayTimeon.toString(),
                                 style: TextStyle(fontSize: 20.0),
                               ),
                               toogleValue1 == true
@@ -370,7 +380,7 @@ class _WorkingPageState extends State<WorkingPage> {
                             initialValue: 1,
                             onChange: (double value1) {
                               setState(() {
-                                displayTime = value1.ceil();
+                                displayTimeof = value1.ceil();
                               });
                             },
                             innerWidget: (double value) {
@@ -385,7 +395,7 @@ class _WorkingPageState extends State<WorkingPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  displayTime.toString(),
+                                  displayTimeof.toString(),
                                   style: TextStyle(fontSize: 20.0),
                                 ),
                                 toogleValue2 == true
@@ -408,23 +418,59 @@ class _WorkingPageState extends State<WorkingPage> {
           ),
         ),
       ]),
-      floatingActionButton: FloatingActionButton(
-        child: Text(
-          "Set",
-          style: TextStyle(fontSize: 22.0),
+      floatingActionButton: Container(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              FloatingActionButton.extended(
+                  onPressed: ()
+                  {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ClockListData()));
+                  },
+                  heroTag: "Hour1",
+                  label: Text("Hour Wise",style: TextStyle(fontSize: 20),)),
+              FloatingActionButton.extended(
+                heroTag: "set1",
+                label: Text(
+                  "Set",
+                  style: TextStyle(fontSize: 22.0),
+                ),
+                onPressed: () {
+                  if(online==true)
+                    {
+
+                      Fluttertoast.showToast(
+                          msg: "Data Transmitted Succesfully",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.blue,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                    }
+                  else
+                    {
+                      Fluttertoast.showToast(
+                          msg: "No device detected",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.blue,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                    }
+
+
+                },
+              ),
+            ],
+          ),
         ),
-        onPressed: () {
-          setState(() {
-            Fluttertoast.showToast(
-                msg: "Data Transmitted Succesfully",
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.blue,
-                textColor: Colors.white,
-                fontSize: 16.0);
-          });
-        },
       ),
     );
   }

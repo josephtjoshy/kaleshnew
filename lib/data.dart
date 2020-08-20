@@ -9,6 +9,7 @@ List<int> selectedData=[0,0,0,0,0,0,0];
 int hours=1,minutes=1;
 ServerSocket serverSocket;
 Socket socketClient;
+bool online=false;
 List <bool> isSelected=[false,false,false,false,false,false,false];
 /*int getId()
 {

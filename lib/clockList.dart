@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_app/main.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:async';
 import 'clockPage.dart';
 import 'data.dart';
-
+Timer timer2;
 class ClockListData extends StatefulWidget {
   @override
   _ClockListDataState createState() => _ClockListDataState();
@@ -24,11 +25,49 @@ class ClockListView extends StatefulWidget {
 }
 
 class _ClockListViewState extends State<ClockListView> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    timer2=Timer.periodic(Duration(seconds: 1), (timer1) {
+      // print(online);
+      setState(() {
+        if(online==true)
+        {
+          online=true;
+        }
+
+
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    timer2.cancel();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Hour Wise Control"),
+        actions: <Widget>[
+          Center(
+              child:Text(
+                online==false?"Not Connected":"Connected",
+                style: TextStyle(fontSize: 20.0),
+              )),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Icon(
+              online==false?Icons.remove_circle_outline:Icons.wifi,
+              color: online==false?Colors.red:Colors.green,
+            ),
+          )
+        ],
         leading: GestureDetector(
           child: Icon(Icons.arrow_back),
           onTap: ()
@@ -107,7 +146,47 @@ class _ClockListViewState extends State<ClockListView> {
               FloatingActionButton.extended(
                 onPressed: ()
                 {
-                  socketClient.write('helo');
+                  if(online==true)
+                    {
+                      List tranmitData=[];
+                      tranmitData.add("list");
+                      for(int i=0;i<timeData.length;i++)
+                      {
+                        tranmitData.add(timeData[i].hour);
+                        tranmitData.add(timeData[i].min);
+                        tranmitData.add(timeData[i].durationmin);
+                        tranmitData.add(timeData[i].durationsec);
+                        tranmitData.add(timeData[i].day1);
+                        tranmitData.add(timeData[i].day2);
+                        tranmitData.add(timeData[i].day3);
+                        tranmitData.add(timeData[i].day4);
+                        tranmitData.add(timeData[i].day5);
+                        tranmitData.add(timeData[i].day6);
+                        tranmitData.add(timeData[i].day7);
+                      }
+                      tranmitData.add(DateTime.now().toString());
+                      socketClient.write(tranmitData);
+                      Fluttertoast.showToast(
+                          msg: "Data Transmitted Succesfully",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.blue,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                    }
+                  else
+                    {
+                      Fluttertoast.showToast(
+                          msg: "No device detected",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.blue,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                    }
+
                 },
                 heroTag: "setHero",
                 label: Text("Set"),
