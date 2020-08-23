@@ -84,7 +84,7 @@ class _ClockListViewState extends State<ClockListView> {
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text("${timeData[index].hour}:${timeData[index].min} Min",style: TextStyle(fontSize: 20,color: Colors.blue),),
+                  Text("${timeData[index].hour[2]}${timeData[index].hour[3]}:${timeData[index].min[2]}${timeData[index].min[3]} Min",style: TextStyle(fontSize: 20,color: Colors.blue),),
                   Text("Duration : ${timeData[index].durationmin}:${timeData[index].durationsec}",style: TextStyle(fontSize: 17,color: Colors.blue),),
                 ],
               ),
@@ -165,6 +165,7 @@ class _ClockListViewState extends State<ClockListView> {
                         tranmitData.add(timeData[i].day7);
                       }
                       tranmitData.add(DateTime.now().toString());
+                      tranmitData.add(DateTime.now().weekday.toString());
                       socketClient.write(tranmitData);
                       Fluttertoast.showToast(
                           msg: "Data Transmitted Succesfully",

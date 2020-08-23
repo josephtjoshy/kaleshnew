@@ -57,10 +57,10 @@ String getWeeks(int index) {
 
 class TimeData {
   String id;
-  int hour;
-  int min;
-  int durationmin;
-  int durationsec;
+  String hour;
+  String min;
+  String durationmin;
+  String durationsec;
   int day1;
   int day2;
   int day3;
@@ -119,7 +119,7 @@ class DatabaseHelper {
 
   void _createDb(Database db, int newVersion) async {
     await db.execute(
-        'CREATE TABLE TimeData (id VARCHAR(30) , hour INTEGER, min INTEGER, durationmin INTEGER, durationsec INTEGER, day1 INTEGER,day2 INTEGER,day3 INTEGER,day4 INTEGER,day5 INTEGER,day6 INTEGER,day7 INTEGER)');
+        'CREATE TABLE TimeData (id VARCHAR(30) , hour VARCHAR(4), min VARCHAR(4), durationmin VARCHAR(2), durationsec VARCHAR(2), day1 INTEGER,day2 INTEGER,day3 INTEGER,day4 INTEGER,day5 INTEGER,day6 INTEGER,day7 INTEGER)');
   }
 
   // Insert Operation: Insert a Note object to database

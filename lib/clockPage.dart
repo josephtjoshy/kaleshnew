@@ -310,14 +310,71 @@ class _ShowClockState extends State<ShowClock> {
             ),
             FloatingActionButton.extended(
               onPressed:(){
+                String hourss,minutess,durationMinn,durationSecc;
+                if(hours.toString().length==1)
+                  {
+                    hourss='000';
+                    hourss+=hours.toString();
+                  }
+                if(hours.toString().length==2)
+                {
+                  hourss='00';
+                  hourss+=hours.toString();
+                }
+                if(hours.toString().length==3)
+                {
+                  hourss='0';
+                  hourss+=hours.toString();
+                }
+                if(hours.toString().length==4)
+                {
+                  hourss=hours.toString();
+                }
+                if(minutes.toString().length==1)
+                  {
+                    minutess='000';
+                    minutess+=minutes.toString();
+                  }
+                if(minutes.toString().length==2)
+                {
+                  minutess='00';
+                  minutess+=minutes.toString();
+                }
+                if(minutes.toString().length==3)
+                {
+                  minutess='0';
+                  minutess+=minutes.toString();
+                }
+                if(minutes.toString().length==4)
+                {
+                  minutess=minutes.toString();
+                }
+                if(durationMin.toString().length==1)
+                  {
+                    durationMinn='0';
+                    durationMinn+=durationMin.toString();
+                  }
+                if(durationMin.toString().length==2)
+                {
+                  durationMinn=durationMin.toString();
+                }
+                if(durationSec.toString().length==1)
+                  {
+                    durationSecc='0';
+                    durationSecc+=durationSec.toString();
+                  }
+                if(durationSec.toString().length==2)
+                {
+                  durationSecc=durationSec.toString();
+                }
                 setState(() {
                   databaseHelper.insertTimeData(
                       TimeData(
                         id:DateTime.now().toString(),
-                        hour:hours,
-                        min: minutes,
-                        durationmin: durationMin,
-                        durationsec: durationSec,
+                        hour:hourss,
+                        min: minutess,
+                        durationmin: durationMinn,
+                        durationsec: durationSecc,
                         day1: selectedData[0],
                         day2: selectedData[1],
                         day3: selectedData[2],
@@ -330,10 +387,10 @@ class _ShowClockState extends State<ShowClock> {
                   timeData.add(
                       TimeData(
                         id: DateTime.now().toString(),
-                        hour:hours,
-                        min: minutes,
-                        durationmin:durationMin,
-                        durationsec: durationSec,
+                        hour:hourss,
+                        min: minutess,
+                        durationmin:durationMinn,
+                        durationsec: durationSecc,
                         day1: selectedData[0],
                         day2: selectedData[1],
                         day3: selectedData[2],

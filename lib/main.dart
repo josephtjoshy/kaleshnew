@@ -64,7 +64,7 @@ class _LoadingPageState extends State<LoadingPage> {
   void initState() {
     // TODO: implement initState
    wifi();
-    wifiTimer=Timer.periodic(Duration(seconds: 3), (timerwi) {
+    wifiTimer=Timer.periodic(Duration(seconds: 1), (timerwi) {
       wifi();
     });
     databaseHelper = DatabaseHelper();
@@ -72,10 +72,10 @@ class _LoadingPageState extends State<LoadingPage> {
       for (var map in value) {
         timeData.add(TimeData(
           id: map["id"],
-          hour: map["hour"],
-          min: map["min"],
-          durationmin: map["durationmin"],
-          durationsec: map["durationsec"],
+          hour: map["hour"].toString(),
+          min: map["min"].toString(),
+          durationmin: map["durationmin"].toString(),
+          durationsec: map["durationsec"].toString(),
           day1: map["day1"],
           day2: map["day2"],
           day3: map["day3"],
@@ -447,22 +447,110 @@ class _WorkingPageState extends State<WorkingPage> {
                   if(online==true)
                     {
                       List tranRepData=[];
-                      tranRepData.add("Repeat");
+                      tranRepData.add("Rept");
                       if(toogleValue1==true)
                         {
-                          tranRepData.add((displayTimeon*60).toString());
+                          int displayTimeonn=displayTimeon*60;
+                          String temp='';
+                          if(displayTimeonn.toString().length==1)
+                          {
+                            temp+='000';
+                            temp+=displayTimeonn.toString();
+                          }
+                          if(displayTimeonn.toString().length==2)
+                          {
+                            temp+='00';
+                            temp+=displayTimeonn.toString();
+                          }
+                          if(displayTimeonn.toString().length==3)
+                          {
+                            temp+='0';
+                            temp+=displayTimeonn.toString();
+                          }
+                          if(displayTimeonn.toString().length==4)
+                          {
+                            temp=displayTimeonn.toString();
+                          }
+                          tranRepData.add(temp);
+
                         }
                       if(toogleValue1==false)
                         {
-                          tranRepData.add(displayTimeon.toString());
+                          String temp='';
+                          if(displayTimeon.toString().length==1)
+                            {
+                              temp+='000';
+                              temp+=displayTimeon.toString();
+                            }
+                          if(displayTimeon.toString().length==2)
+                          {
+                            temp+='00';
+                            temp+=displayTimeon.toString();
+                          }
+                          if(displayTimeon.toString().length==3)
+                          {
+                            temp+='0';
+                            temp+=displayTimeon.toString();
+                          }
+                          if(displayTimeon.toString().length==4)
+                          {
+
+                            temp+=displayTimeon.toString();
+                          }
+                          tranRepData.add(temp);
                         }
                       if(toogleValue2==true)
                       {
-                        tranRepData.add((displayTimeof*60).toString());
+                        int displayTimeoff=displayTimeof*60;
+                        String temp='';
+                        if(displayTimeoff.toString().length==1)
+                        {
+                          temp+='000';
+                          temp+=displayTimeoff.toString();
+                        }
+                        if(displayTimeoff.toString().length==2)
+                        {
+                          temp+='00';
+                          temp+=displayTimeoff.toString();
+                        }
+                        if(displayTimeoff.toString().length==3)
+                        {
+                          temp+='0';
+                          temp+=displayTimeoff.toString();
+                        }
+                        if(displayTimeoff.toString().length==4)
+                        {
+
+                          temp+=displayTimeoff.toString();
+                        }
+                        tranRepData.add(temp);
+
                       }
                       if(toogleValue2==false)
                       {
-                        tranRepData.add(displayTimeof.toString());
+                        String temp='';
+                        if(displayTimeof.toString().length==1)
+                        {
+                          temp+='000';
+                          temp+=displayTimeof.toString();
+                        }
+                        if(displayTimeof.toString().length==2)
+                        {
+                          temp+='00';
+                          temp+=displayTimeof.toString();
+                        }
+                        if(displayTimeof.toString().length==3)
+                        {
+                          temp+='0';
+                          temp+=displayTimeof.toString();
+                        }
+                        if(displayTimeof.toString().length==4)
+                        {
+
+                          temp+=displayTimeof.toString();
+                        }
+                        tranRepData.add(temp);
+
                       }
                       socketClient.write(tranRepData);
 
