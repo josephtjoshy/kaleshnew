@@ -90,6 +90,7 @@ class _ClockListViewState extends State<ClockListView> {
               ),
               subtitle: Text("${getWeeks(index)}"),
               leading: Padding(
+
                 padding: const EdgeInsets.all(8.0),
                 child: Text("${index+1}",style: TextStyle(fontSize: 25,color: Colors.blue),
                 ),
