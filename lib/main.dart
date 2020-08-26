@@ -552,6 +552,7 @@ class _WorkingPageState extends State<WorkingPage> {
                         tranRepData.add(temp);
 
                       }
+                      tranRepData.add("\r");
                       socketClient.write(tranRepData);
 
                       Fluttertoast.showToast(

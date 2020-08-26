@@ -167,6 +167,7 @@ class _ClockListViewState extends State<ClockListView> {
                       }
                       tranmitData.add(DateTime.now().toString());
                       tranmitData.add(DateTime.now().weekday.toString());
+                      tranmitData.add("\r");
                       socketClient.write(tranmitData);
                       Fluttertoast.showToast(
                           msg: "Data Transmitted Succesfully",
