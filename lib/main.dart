@@ -1,4 +1,4 @@
-
+import 'dart:html';
 import 'dart:io';
 import 'dart:async';
 import 'package:wifi_iot/wifi_iot.dart';
@@ -13,8 +13,8 @@ import 'data.dart';
 
 bool toogleValue1 = true;
 bool toogleValue2 = true;
-int displayTimeon = 1,displayTimeof=1;
-Timer timer,wifiTimer;
+int displayTimeon = 1, displayTimeof = 1;
+Timer timer, wifiTimer;
 void main() {
   runApp(Loading());
 }
@@ -63,8 +63,8 @@ class _LoadingPageState extends State<LoadingPage> {
   @override
   void initState() {
     // TODO: implement initState
-   wifi();
-    wifiTimer=Timer.periodic(Duration(seconds: 1), (timerwi) {
+    wifi();
+    wifiTimer = Timer.periodic(Duration(seconds: 1), (timerwi) {
       wifi();
     });
     databaseHelper = DatabaseHelper();
@@ -92,21 +92,20 @@ class _LoadingPageState extends State<LoadingPage> {
 
     ServerSocket.bind("0.0.0.0", 4010)
       ..then((socket) {
-        serverSocket=socket;
+        serverSocket = socket;
         runZoned(() {}, onError: (e) {
-          online=false;
+          online = false;
           print('Server error 1: $e');
         });
         serverSocket.listen((sock) {}).onData((clientSocket) {
-          socketClient=clientSocket;
+          socketClient = clientSocket;
           print(socketClient.remoteAddress);
-          online=true;
-
+          online = true;
         });
       })
       ..catchError((onError) {
         print(['Server error 2: ', onError.toString()]);
-        online=false;
+        online = false;
       })
       ..whenComplete(() {
         print(['Complete']);
@@ -114,18 +113,19 @@ class _LoadingPageState extends State<LoadingPage> {
     super.initState();
   }
 
- @override
- void dispose() {
+  @override
+  void dispose() {
     // TODO: implement dispose
 
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Container(
-          width: MediaQuery.of(context).size.width/1.25,
+          width: MediaQuery.of(context).size.width / 1.25,
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -151,22 +151,17 @@ class WorkingPage extends StatefulWidget {
   _WorkingPageState createState() => _WorkingPageState();
 }
 
-
 class _WorkingPageState extends State<WorkingPage> {
-
   @override
   void initState() {
     // TODO: implement initState
 
-    timer=Timer.periodic(Duration(seconds: 1), (timer1) {
-     // print(online);
+    timer = Timer.periodic(Duration(seconds: 1), (timer1) {
+      // print(online);
       setState(() {
-        if(online==true)
-        {
-          online=true;
+        if (online == true) {
+          online = true;
         }
-
-
       });
     });
     super.initState();
@@ -187,124 +182,95 @@ class _WorkingPageState extends State<WorkingPage> {
         title: Text("Automatic Motor"),
         actions: <Widget>[
           Center(
-              child:Text(
-            online==false?"Not Connected":"Connected",
+              child: Text(
+            online == false ? "Not Connected" : "Connected",
             style: TextStyle(fontSize: 20.0),
           )),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Icon(
-              online==false?Icons.remove_circle_outline:Icons.wifi,
-              color: online==false?Colors.red:Colors.green,
+              online == false ? Icons.remove_circle_outline : Icons.wifi,
+              color: online == false ? Colors.red : Colors.green,
             ),
           )
         ],
       ),
-
       body: Column(children: <Widget>[
         Expanded(
             child: Padding(
           padding: const EdgeInsets.fromLTRB(8.0, 20.0, 8.0, 2.0),
           child: Container(
             //color: Colors.lightBlue,
+            width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(20.0)),
               border: Border.all(),
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0.0,0.0,0.0,20.0),
+                  child: Text(
+                    "ON Timer",
+                    style: TextStyle(fontSize: 25.0),
+                  ),
+                ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0.0, 0.0, 100.0, 0.0),
-                      child: Text(
-                        "ON Timer",
-                        style: TextStyle(fontSize: 25.0),
-                      ),
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 50,
+                      height: 50,
+                      color: Colors.pink,
                     ),
-                    Text("Sec"),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: AnimatedContainer(
-                        duration: Duration(milliseconds: 200),
-                        decoration: BoxDecoration(
-                          border: Border.all(),
-                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                        ),
-                        height: 40,
-                        width: 80,
-                        child: Stack(
-                          children: <Widget>[
-                            AnimatedPositioned(
-                              duration: Duration(milliseconds: 200),
-                              curve: Curves.easeIn,
-                              top: 3.0,
-                              left: toogleValue1 == true ? 45.0 : 0.0,
-                              right: toogleValue1 == true ? 0.0 : 45.0,
-                              child: InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      toogleValue1 = !toogleValue1;
-                                    });
-                                  },
-                                  child: Icon(
-                                    Icons.check_circle,
-                                    size: 35.0,
-                                    color: Colors.green,
-                                  )),
-                            )
-                          ],
-                        ),
-                      ),
+                    SizedBox(
+                      width: 10,
                     ),
-                    Text("Min")
+                    Container(
+                      width: 50,
+                      height: 50,
+                      color: Colors.pink,
+                    )
                   ],
                 ),
-                Center(
-                  child: Stack(
-                    children: <Widget>[
-                      Container(
-                        width: 170,
-                        height: 170,
-                        child: SleekCircularSlider(
-                          min: 0,
-                          max: 60,
-                          initialValue: 1,
-                          onChange: (double value1) {
-                            setState(() {
-                              displayTimeon = value1.ceil();
-                            });
-                          },
-                          innerWidget: (double value) {
-                            return null;
-                          },
-                        ),
-                      ),
-                      Container(
-                          height: 170,
-                          width: 170,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                displayTimeon.toString(),
-                                style: TextStyle(fontSize: 20.0),
-                              ),
-                              toogleValue1 == true
-                                  ? Text(
-                                      "Min",
-                                      style: TextStyle(fontSize: 20.0),
-                                    )
-                                  : Text(
-                                      "Sec",
-                                      style: TextStyle(fontSize: 20.0),
-                                    ),
-                            ],
-                          ))
-                    ],
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 50,
+                      height: 50,
+                      //color: Colors.pink,
+                    ),
+                    Container(
+                      width: 10,
+                      child: Text(":"),
+                      color: Colors.pink,
+                    ),
+                    Container(
+                      width: 50,
+                      height: 50,
+                      //color: Colors.pink,
+                    )
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 50,
+                      height: 50,
+                      color: Colors.pink,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Container(
+                      width: 50,
+                      height: 50,
+                      color: Colors.pink,
+                    )
+                  ],
                 ),
               ],
             ),
@@ -322,98 +288,13 @@ class _WorkingPageState extends State<WorkingPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Padding(
-                        padding:
-                            const EdgeInsets.fromLTRB(0.0, 0.0, 100.0, 0.0),
-                        child: Text(
-                          "OFF Timer",
-                          style: TextStyle(fontSize: 25.0),
-                        ),
+                      Text(
+                        "OFF Timer",
+                        style: TextStyle(fontSize: 25.0),
                       ),
-                      Text("Sec"),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: AnimatedContainer(
-                          duration: Duration(milliseconds: 200),
-                          decoration: BoxDecoration(
-                            border: Border.all(),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
-                          ),
-                          height: 40,
-                          width: 80,
-                          child: Stack(
-                            children: <Widget>[
-                              AnimatedPositioned(
-                                duration: Duration(milliseconds: 200),
-                                curve: Curves.easeIn,
-                                top: 3.0,
-                                left: toogleValue2 == true ? 45.0 : 0.0,
-                                right: toogleValue2 == true ? 0.0 : 45.0,
-                                child: InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        toogleValue2 = !toogleValue2;
-                                      });
-                                    },
-                                    child: Icon(
-                                      Icons.check_circle,
-                                      size: 35.0,
-                                      color: Colors.green,
-                                    )),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Text("Min")
                     ],
-                  ),
-                  Center(
-                    child: Stack(
-                      children: <Widget>[
-                        Container(
-                          width: 170,
-                          height: 170,
-                          child: SleekCircularSlider(
-                            min: 0,
-                            max: 60,
-                            initialValue: 1,
-                            onChange: (double value1) {
-                              setState(() {
-                                displayTimeof = value1.ceil();
-                              });
-                            },
-                            innerWidget: (double value) {
-                              return null;
-                            },
-                          ),
-                        ),
-                        Container(
-                            height: 170,
-                            width: 170,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  displayTimeof.toString(),
-                                  style: TextStyle(fontSize: 20.0),
-                                ),
-                                toogleValue2 == true
-                                    ? Text(
-                                        "Min",
-                                        style: TextStyle(fontSize: 20.0),
-                                      )
-                                    : Text(
-                                        "Sec",
-                                        style: TextStyle(fontSize: 20.0),
-                                      ),
-                              ],
-                            ))
-                      ],
-                    ),
                   ),
                 ],
               ),
@@ -428,15 +309,17 @@ class _WorkingPageState extends State<WorkingPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               FloatingActionButton.extended(
-                  onPressed: ()
-                  {
+                  onPressed: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => ClockListData()));
                   },
                   heroTag: "Hour1",
-                  label: Text("Hour Wise",style: TextStyle(fontSize: 20),)),
+                  label: Text(
+                    "Hour Wise",
+                    style: TextStyle(fontSize: 20),
+                  )),
               FloatingActionButton.extended(
                 heroTag: "set1",
                 label: Text(
@@ -444,139 +327,108 @@ class _WorkingPageState extends State<WorkingPage> {
                   style: TextStyle(fontSize: 22.0),
                 ),
                 onPressed: () {
-                  if(online==true)
-                    {
-                      List tranRepData=[];
-                      tranRepData.add("Rept");
-                      if(toogleValue1==true)
-                        {
-                          int displayTimeonn=displayTimeon*60;
-                          String temp='';
-                          if(displayTimeonn.toString().length==1)
-                          {
-                            temp+='000';
-                            temp+=displayTimeonn.toString();
-                          }
-                          if(displayTimeonn.toString().length==2)
-                          {
-                            temp+='00';
-                            temp+=displayTimeonn.toString();
-                          }
-                          if(displayTimeonn.toString().length==3)
-                          {
-                            temp+='0';
-                            temp+=displayTimeonn.toString();
-                          }
-                          if(displayTimeonn.toString().length==4)
-                          {
-                            temp=displayTimeonn.toString();
-                          }
-                          tranRepData.add(temp);
-
-                        }
-                      if(toogleValue1==false)
-                        {
-                          String temp='';
-                          if(displayTimeon.toString().length==1)
-                            {
-                              temp+='000';
-                              temp+=displayTimeon.toString();
-                            }
-                          if(displayTimeon.toString().length==2)
-                          {
-                            temp+='00';
-                            temp+=displayTimeon.toString();
-                          }
-                          if(displayTimeon.toString().length==3)
-                          {
-                            temp+='0';
-                            temp+=displayTimeon.toString();
-                          }
-                          if(displayTimeon.toString().length==4)
-                          {
-
-                            temp+=displayTimeon.toString();
-                          }
-                          tranRepData.add(temp);
-                        }
-                      if(toogleValue2==true)
-                      {
-                        int displayTimeoff=displayTimeof*60;
-                        String temp='';
-                        if(displayTimeoff.toString().length==1)
-                        {
-                          temp+='000';
-                          temp+=displayTimeoff.toString();
-                        }
-                        if(displayTimeoff.toString().length==2)
-                        {
-                          temp+='00';
-                          temp+=displayTimeoff.toString();
-                        }
-                        if(displayTimeoff.toString().length==3)
-                        {
-                          temp+='0';
-                          temp+=displayTimeoff.toString();
-                        }
-                        if(displayTimeoff.toString().length==4)
-                        {
-
-                          temp+=displayTimeoff.toString();
-                        }
-                        tranRepData.add(temp);
-
+                  if (online == true) {
+                    List tranRepData = [];
+                    tranRepData.add("Rept");
+                    if (toogleValue1 == true) {
+                      int displayTimeonn = displayTimeon * 60;
+                      String temp = '';
+                      if (displayTimeonn.toString().length == 1) {
+                        temp += '000';
+                        temp += displayTimeonn.toString();
                       }
-                      if(toogleValue2==false)
-                      {
-                        String temp='';
-                        if(displayTimeof.toString().length==1)
-                        {
-                          temp+='000';
-                          temp+=displayTimeof.toString();
-                        }
-                        if(displayTimeof.toString().length==2)
-                        {
-                          temp+='00';
-                          temp+=displayTimeof.toString();
-                        }
-                        if(displayTimeof.toString().length==3)
-                        {
-                          temp+='0';
-                          temp+=displayTimeof.toString();
-                        }
-                        if(displayTimeof.toString().length==4)
-                        {
-
-                          temp+=displayTimeof.toString();
-                        }
-                        tranRepData.add(temp);
-
+                      if (displayTimeonn.toString().length == 2) {
+                        temp += '00';
+                        temp += displayTimeonn.toString();
                       }
-                      tranRepData.add("\r");
-                      socketClient.write(tranRepData);
-
-                      Fluttertoast.showToast(
-                          msg: "Data Transmitted Succesfully",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.blue,
-                          textColor: Colors.white,
-                          fontSize: 16.0);
+                      if (displayTimeonn.toString().length == 3) {
+                        temp += '0';
+                        temp += displayTimeonn.toString();
+                      }
+                      if (displayTimeonn.toString().length == 4) {
+                        temp = displayTimeonn.toString();
+                      }
+                      tranRepData.add(temp);
                     }
-                  else
-                    {
-                      Fluttertoast.showToast(
-                          msg: "No device detected",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.blue,
-                          textColor: Colors.white,
-                          fontSize: 16.0);
+                    if (toogleValue1 == false) {
+                      String temp = '';
+                      if (displayTimeon.toString().length == 1) {
+                        temp += '000';
+                        temp += displayTimeon.toString();
+                      }
+                      if (displayTimeon.toString().length == 2) {
+                        temp += '00';
+                        temp += displayTimeon.toString();
+                      }
+                      if (displayTimeon.toString().length == 3) {
+                        temp += '0';
+                        temp += displayTimeon.toString();
+                      }
+                      if (displayTimeon.toString().length == 4) {
+                        temp += displayTimeon.toString();
+                      }
+                      tranRepData.add(temp);
                     }
+                    if (toogleValue2 == true) {
+                      int displayTimeoff = displayTimeof * 60;
+                      String temp = '';
+                      if (displayTimeoff.toString().length == 1) {
+                        temp += '000';
+                        temp += displayTimeoff.toString();
+                      }
+                      if (displayTimeoff.toString().length == 2) {
+                        temp += '00';
+                        temp += displayTimeoff.toString();
+                      }
+                      if (displayTimeoff.toString().length == 3) {
+                        temp += '0';
+                        temp += displayTimeoff.toString();
+                      }
+                      if (displayTimeoff.toString().length == 4) {
+                        temp += displayTimeoff.toString();
+                      }
+                      tranRepData.add(temp);
+                    }
+                    if (toogleValue2 == false) {
+                      String temp = '';
+                      if (displayTimeof.toString().length == 1) {
+                        temp += '000';
+                        temp += displayTimeof.toString();
+                      }
+                      if (displayTimeof.toString().length == 2) {
+                        temp += '00';
+                        temp += displayTimeof.toString();
+                      }
+                      if (displayTimeof.toString().length == 3) {
+                        temp += '0';
+                        temp += displayTimeof.toString();
+                      }
+                      if (displayTimeof.toString().length == 4) {
+                        temp += displayTimeof.toString();
+                      }
+                      tranRepData.add(temp);
+                    }
+                    tranRepData.add("\r");
+                    socketClient.write(tranRepData);
 
-
+                    Fluttertoast.showToast(
+                        msg: "Data Transmitted Succesfully",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.blue,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                  } else {
+                    Fluttertoast.showToast(
+                        msg: "No device detected",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.blue,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                  }
                 },
               ),
             ],
@@ -586,9 +438,10 @@ class _WorkingPageState extends State<WorkingPage> {
     );
   }
 }
+
 Future<void> wifi() async {
   WiFiForIoTPlugin.isEnabled().then(
-        (val) {
+    (val) {
       if (val != null) {
         isEnabled = val;
         print('Wifi Status:$isEnabled');
@@ -600,18 +453,14 @@ Future<void> wifi() async {
     },
   );
   WiFiForIoTPlugin.isConnected().then(
-        (val) {
+    (val) {
       if (val != null) {
         isConnected = val;
         print('Connected:$isConnected');
       }
-      if(isConnected==false)
-        {
-          online=false;
-        }
-
+      if (isConnected == false) {
+        online = false;
+      }
     },
   );
-
-
 }
