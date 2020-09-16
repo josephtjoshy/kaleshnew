@@ -177,6 +177,7 @@ class _ClockListViewState extends State<ClockListView> {
                           backgroundColor: Colors.blue,
                           textColor: Colors.white,
                           fontSize: 16.0);
+                          online=false;
                     }
                   else
                     {
