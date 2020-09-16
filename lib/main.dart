@@ -1,19 +1,20 @@
-import 'dart:html';
 import 'dart:io';
 import 'dart:async';
+import 'dart:ui';
 import 'package:wifi_iot/wifi_iot.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 //import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
-import 'package:sleek_circular_slider/sleek_circular_slider.dart';
+
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'clockList.dart';
 import 'data.dart';
 
-bool toogleValue1 = true;
-bool toogleValue2 = true;
-int displayTimeon = 1, displayTimeof = 1;
+int displayTimeonMin = 0,
+    displayTimeofMin = 0,
+    displayTimeonSec = 30,
+    displayTimeofSec = 30;
 Timer timer, wifiTimer;
 void main() {
   runApp(Loading());
@@ -25,13 +26,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  @override
-  void initState() {
-    // TODO: implement initState
-
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -62,7 +56,6 @@ class LoadingPage extends StatefulWidget {
 class _LoadingPageState extends State<LoadingPage> {
   @override
   void initState() {
-    // TODO: implement initState
     wifi();
     wifiTimer = Timer.periodic(Duration(seconds: 1), (timerwi) {
       wifi();
@@ -114,13 +107,6 @@ class _LoadingPageState extends State<LoadingPage> {
   }
 
   @override
-  void dispose() {
-    // TODO: implement dispose
-
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
@@ -154,8 +140,6 @@ class WorkingPage extends StatefulWidget {
 class _WorkingPageState extends State<WorkingPage> {
   @override
   void initState() {
-    // TODO: implement initState
-
     timer = Timer.periodic(Duration(seconds: 1), (timer1) {
       // print(online);
       setState(() {
@@ -170,7 +154,7 @@ class _WorkingPageState extends State<WorkingPage> {
   @override
   void dispose() {
     print("timer canceled");
-    // TODO: implement dispose
+
     timer.cancel();
     super.dispose();
   }
@@ -210,7 +194,7 @@ class _WorkingPageState extends State<WorkingPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(0.0,0.0,0.0,20.0),
+                  padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 20.0),
                   child: Text(
                     "ON Timer",
                     style: TextStyle(fontSize: 25.0),
@@ -219,18 +203,54 @@ class _WorkingPageState extends State<WorkingPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      width: 50,
-                      height: 50,
-                      color: Colors.pink,
+                    GestureDetector(
+                      child: Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                            color: Colors.pink,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(25.0),
+                                topRight: Radius.circular(25.0))),
+                        child: Center(
+                            child: Text(
+                          "+",
+                          style: TextStyle(fontSize: 30),
+                        )),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          if (displayTimeonMin < 60) {
+                            displayTimeonMin++;
+                          }
+                        });
+                      },
                     ),
                     SizedBox(
                       width: 10,
                     ),
-                    Container(
-                      width: 50,
-                      height: 50,
-                      color: Colors.pink,
+                    GestureDetector(
+                      child: Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                            color: Colors.pink,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(25.0),
+                                topRight: Radius.circular(25.0))),
+                        child: Center(
+                            child: Text(
+                          "+",
+                          style: TextStyle(fontSize: 30),
+                        )),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          if (displayTimeonSec < 60) {
+                            displayTimeonSec++;
+                          }
+                        });
+                      },
                     )
                   ],
                 ),
@@ -240,35 +260,84 @@ class _WorkingPageState extends State<WorkingPage> {
                     Container(
                       width: 50,
                       height: 50,
-                      //color: Colors.pink,
+                      child: Center(
+                          child: Text(
+                        "${displayTimeonMin.toString()}M",
+                        style: TextStyle(fontSize: 20.0),
+                      )),
                     ),
                     Container(
                       width: 10,
-                      child: Text(":"),
-                      color: Colors.pink,
+                      height: 50,
+                      child: Center(
+                          child: Text(":",
+                              style: TextStyle(
+                                fontSize: 30.0,
+                                color: Colors.black,
+                              ))),
                     ),
                     Container(
                       width: 50,
                       height: 50,
-                      //color: Colors.pink,
+                      child: Center(
+                          child: Text(
+                        "${displayTimeonSec.toString()}s",
+                        style: TextStyle(fontSize: 20.0),
+                      )),
                     )
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      width: 50,
-                      height: 50,
-                      color: Colors.pink,
+                    GestureDetector(
+                      child: Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                            color: Colors.pink,
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(25.0),
+                                bottomRight: Radius.circular(25.0))),
+                        child: Center(
+                            child: Text(
+                          "-",
+                          style: TextStyle(fontSize: 40),
+                        )),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          if (displayTimeonMin > 0) {
+                            displayTimeonMin--;
+                          }
+                        });
+                      },
                     ),
                     SizedBox(
                       width: 10,
                     ),
-                    Container(
-                      width: 50,
-                      height: 50,
-                      color: Colors.pink,
+                    GestureDetector(
+                      child: Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                            color: Colors.pink,
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(25.0),
+                                bottomRight: Radius.circular(25.0))),
+                        child: Center(
+                            child: Text(
+                          "-",
+                          style: TextStyle(fontSize: 40),
+                        )),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          if (displayTimeonSec > 0) {
+                            displayTimeonSec--;
+                          }
+                        });
+                      },
                     )
                   ],
                 ),
@@ -285,15 +354,154 @@ class _WorkingPageState extends State<WorkingPage> {
                   border: Border.all(),
                   borderRadius: BorderRadius.all(Radius.circular(20.0))),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                    child: Text(
+                      "OFF Timer",
+                      style: TextStyle(fontSize: 25.0),
+                    ),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        "OFF Timer",
-                        style: TextStyle(fontSize: 25.0),
+                    children: [
+                      GestureDetector(
+                        child: Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                              color: Colors.pink,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(25.0),
+                                  topRight: Radius.circular(25.0))),
+                          child: Center(
+                              child: Text(
+                            "+",
+                            style: TextStyle(fontSize: 30),
+                          )),
+                        ),
+                        onTap: () {
+                          setState(() {
+                            if (displayTimeofMin < 60) {
+                              displayTimeofMin++;
+                            }
+                          });
+                        },
                       ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      GestureDetector(
+                        child: Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                              color: Colors.pink,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(25.0),
+                                  topRight: Radius.circular(25.0))),
+                          child: Center(
+                              child: Text(
+                            "+",
+                            style: TextStyle(fontSize: 30),
+                          )),
+                        ),
+                        onTap: () {
+                          setState(() {
+                            if (displayTimeofSec < 60) {
+                              displayTimeofSec++;
+                            }
+                          });
+                        },
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 50,
+                        height: 50,
+                        child: Center(
+                            child: Text(
+                          "${displayTimeofMin.toString()}M",
+                          style: TextStyle(fontSize: 20.0),
+                        )),
+                      ),
+                      Container(
+                        width: 10,
+                        height: 50,
+                        child: Center(
+                            child: Text(":",
+                                style: TextStyle(
+                                  fontSize: 30.0,
+                                  color: Colors.black,
+                                ))),
+                      ),
+                      Container(
+                        width: 50,
+                        height: 50,
+                        child: Center(
+                            child: Text(
+                          "${displayTimeofSec.toString()}s",
+                          style: TextStyle(fontSize: 20.0),
+                        )),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        child: Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                              color: Colors.pink,
+                              borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(25.0),
+                                  bottomRight: Radius.circular(25.0))),
+                          child: Center(
+                              child: Text(
+                            "-",
+                            style: TextStyle(fontSize: 40),
+                          )),
+                        ),
+                        onTap: () {
+                          setState(() {
+                            if (displayTimeofMin > 0) {
+                              displayTimeofMin--;
+                            }
+                          });
+                        },
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      GestureDetector(
+                        child: Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                              color: Colors.pink,
+                              borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(25.0),
+                                  bottomRight: Radius.circular(25.0))),
+                          child: Center(
+                              child: Text(
+                            "-",
+                            style: TextStyle(fontSize: 40),
+                          )),
+                        ),
+                        onTap: () {
+                          setState(() {
+                            if (displayTimeofSec > 0) {
+                              displayTimeofSec--;
+                            }
+                          });
+                        },
+                      )
                     ],
                   ),
                 ],
@@ -330,84 +538,47 @@ class _WorkingPageState extends State<WorkingPage> {
                   if (online == true) {
                     List tranRepData = [];
                     tranRepData.add("Rept");
-                    if (toogleValue1 == true) {
-                      int displayTimeonn = displayTimeon * 60;
-                      String temp = '';
-                      if (displayTimeonn.toString().length == 1) {
-                        temp += '000';
-                        temp += displayTimeonn.toString();
-                      }
-                      if (displayTimeonn.toString().length == 2) {
-                        temp += '00';
-                        temp += displayTimeonn.toString();
-                      }
-                      if (displayTimeonn.toString().length == 3) {
-                        temp += '0';
-                        temp += displayTimeonn.toString();
-                      }
-                      if (displayTimeonn.toString().length == 4) {
-                        temp = displayTimeonn.toString();
-                      }
-                      tranRepData.add(temp);
+
+                    int displayTimeonn =
+                        (displayTimeonMin * 60) + displayTimeonSec;
+                    String temp = '';
+                    if (displayTimeonn.toString().length == 1) {
+                      temp += '000';
+                      temp += displayTimeonn.toString();
                     }
-                    if (toogleValue1 == false) {
-                      String temp = '';
-                      if (displayTimeon.toString().length == 1) {
-                        temp += '000';
-                        temp += displayTimeon.toString();
-                      }
-                      if (displayTimeon.toString().length == 2) {
-                        temp += '00';
-                        temp += displayTimeon.toString();
-                      }
-                      if (displayTimeon.toString().length == 3) {
-                        temp += '0';
-                        temp += displayTimeon.toString();
-                      }
-                      if (displayTimeon.toString().length == 4) {
-                        temp += displayTimeon.toString();
-                      }
-                      tranRepData.add(temp);
+                    if (displayTimeonn.toString().length == 2) {
+                      temp += '00';
+                      temp += displayTimeonn.toString();
                     }
-                    if (toogleValue2 == true) {
-                      int displayTimeoff = displayTimeof * 60;
-                      String temp = '';
-                      if (displayTimeoff.toString().length == 1) {
-                        temp += '000';
-                        temp += displayTimeoff.toString();
-                      }
-                      if (displayTimeoff.toString().length == 2) {
-                        temp += '00';
-                        temp += displayTimeoff.toString();
-                      }
-                      if (displayTimeoff.toString().length == 3) {
-                        temp += '0';
-                        temp += displayTimeoff.toString();
-                      }
-                      if (displayTimeoff.toString().length == 4) {
-                        temp += displayTimeoff.toString();
-                      }
-                      tranRepData.add(temp);
+                    if (displayTimeonn.toString().length == 3) {
+                      temp += '0';
+                      temp += displayTimeonn.toString();
                     }
-                    if (toogleValue2 == false) {
-                      String temp = '';
-                      if (displayTimeof.toString().length == 1) {
-                        temp += '000';
-                        temp += displayTimeof.toString();
-                      }
-                      if (displayTimeof.toString().length == 2) {
-                        temp += '00';
-                        temp += displayTimeof.toString();
-                      }
-                      if (displayTimeof.toString().length == 3) {
-                        temp += '0';
-                        temp += displayTimeof.toString();
-                      }
-                      if (displayTimeof.toString().length == 4) {
-                        temp += displayTimeof.toString();
-                      }
-                      tranRepData.add(temp);
+                    if (displayTimeonn.toString().length == 4) {
+                      temp = displayTimeonn.toString();
                     }
+                    tranRepData.add(temp);
+
+                    int displayTimeoff =
+                        (displayTimeofMin * 60) + displayTimeofSec;
+                    temp = '';
+                    if (displayTimeoff.toString().length == 1) {
+                      temp += '000';
+                      temp += displayTimeoff.toString();
+                    }
+                    if (displayTimeoff.toString().length == 2) {
+                      temp += '00';
+                      temp += displayTimeoff.toString();
+                    }
+                    if (displayTimeoff.toString().length == 3) {
+                      temp += '0';
+                      temp += displayTimeoff.toString();
+                    }
+                    if (displayTimeoff.toString().length == 4) {
+                      temp += displayTimeoff.toString();
+                    }
+                    tranRepData.add(temp);
+
                     tranRepData.add("\r");
                     socketClient.write(tranRepData);
 
@@ -419,6 +590,7 @@ class _WorkingPageState extends State<WorkingPage> {
                         backgroundColor: Colors.blue,
                         textColor: Colors.white,
                         fontSize: 16.0);
+                    online = false;
                   } else {
                     Fluttertoast.showToast(
                         msg: "No device detected",

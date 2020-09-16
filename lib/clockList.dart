@@ -28,7 +28,7 @@ class _ClockListViewState extends State<ClockListView> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    
     timer2=Timer.periodic(Duration(seconds: 1), (timer1) {
       // print(online);
       setState(() {
@@ -45,7 +45,7 @@ class _ClockListViewState extends State<ClockListView> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    
     timer2.cancel();
     super.dispose();
   }

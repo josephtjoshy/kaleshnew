@@ -33,7 +33,7 @@ class _ShowClockState extends State<ShowClock> {
 
 @override
   void initState() {
-    // TODO: implement initState
+   
   setState(() {
     isSelected=[false,false,false,false,false,false,false];
     selectedData=[0,0,0,0,0,0,0];
